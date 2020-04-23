@@ -3,44 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/BasicFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/BasicFragment"
         android:name="com.example.androidcalculatorapp.BasicFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/basic_fragment_label"
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/pcientificFragment" />
+            android:id="@+id/action_BasicFragment_to_ScientificFragment"
+            app:destination="@id/ScientificFragment" />
         <action
-            android:id="@+id/action_FirstFragment_to_programmerFragment"
-            app:destination="@id/programmerFragment" />
+            android:id="@+id/action_BasicFragment_to_programmerFragment"
+            app:destination="@id/ProgrammerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/pcientificFragment"
+        android:id="@+id/ScientificFragment"
         android:name="com.example.androidcalculatorapp.ScientificFragment"
-        android:label="@string/second_fragment_label"
+        android:label="@string/scientific_fragment_label"
         tools:layout="@layout/fragment_scientific">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_ScientificFragment_to_BasicFragment"
+            app:destination="@id/BasicFragment" />
         <action
-            android:id="@+id/action_pcientificFragment_to_programmerFragment"
-            app:destination="@id/programmerFragment" />
+            android:id="@+id/action_ScientificFragment_to_programmerFragment"
+            app:destination="@id/ProgrammerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/programmerFragment"
+        android:id="@+id/ProgrammerFragment"
         android:name="com.example.androidcalculatorapp.ProgrammerFragment"
-        android:label="fragment_programmer"
-        tools:layout="@layout/fragment_programmer" >
+        android:label="@string/programmer_fragment_label"
+        tools:layout="@layout/fragment_programmer">
         <action
-            android:id="@+id/action_programmerFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_programmerFragment_to_BasicFragment"
+            app:destination="@id/BasicFragment" />
         <action
-            android:id="@+id/action_programmerFragment_to_pcientificFragment"
-            app:destination="@id/pcientificFragment" />
+            android:id="@+id/action_programmerFragment_to_ScientificFragment"
+            app:destination="@id/ScientificFragment" />
     </fragment>
 </navigation>

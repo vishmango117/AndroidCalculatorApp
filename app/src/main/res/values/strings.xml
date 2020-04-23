@@ -2,8 +2,10 @@
     <string name="app_name">AndroidCalculatorApp</string>
     <string name="title_activity_home">HomeActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="basic_fragment_label">BasicFragment</string>
+    <string name="scientific_fragment_label">ScientificFragment</string>
+    <string name="programmer_fragment_label">ProgrammerFragment</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 

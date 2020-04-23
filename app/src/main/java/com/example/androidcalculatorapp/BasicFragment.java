@@ -13,11 +13,18 @@ import androidx.navigation.fragment.NavHostFragment;
 
 public class BasicFragment extends Fragment {
 
-    //Creating Buttons
+    // BUTTONS FOR NUMBER PAD
     Button button0, button1, button2, button3, button4, button5, button6,
-            button7, button8, button9, buttonAdd, buttonSub, buttonDivision,
-            buttonMul, button00, buttonC, buttonEqual;
+            button7, button8, button9, button00;
 
+    // BUTTONS FOR ARITHEMATIC EXPRESSIONS
+    Button buttonAdd, buttonSub, buttonDivision,
+            buttonMul, buttonC, buttonEqual;
+
+    // BUTTONS FOR CALCULATOR MODES
+    Button button_programmer, button_scientific, button_unitconverter;
+
+    // INPUT TEXT
     EditText myEditText;
 
     float mValueOne, mValueTwo;
@@ -37,6 +44,7 @@ public class BasicFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //CREATING BUTTONS and TEXT OBJECTS
+        //BUTTONS FOR NUMBER PAD
         button0 = (Button) view.findViewById(R.id.button0);
         button00 = (Button) view.findViewById(R.id.button00);
         button1 = (Button) view.findViewById(R.id.button1);
@@ -48,13 +56,23 @@ public class BasicFragment extends Fragment {
         button7 = (Button) view.findViewById(R.id.button7);
         button8 = (Button) view.findViewById(R.id.button8);
         button9 = (Button) view.findViewById(R.id.button9);
+
+        //BUTTONS FOR ARITHMETIC FUNCTIONS
         buttonAdd = (Button) view.findViewById(R.id.button_add);
         buttonSub = (Button) view.findViewById(R.id.button_sub);
         buttonMul = (Button) view.findViewById(R.id.button_mul);
         buttonDivision = (Button) view.findViewById(R.id.button_div);
-        buttonC = (Button) view.findViewById(R.id.buttonC);
         buttonEqual = (Button) view.findViewById(R.id.button_eql);
         myEditText = (EditText) view.findViewById(R.id.edt1);
+
+        // BUTTONS FOR OTHER MODES
+        buttonC = (Button) view.findViewById(R.id.btn_clear);
+        button_programmer = (Button) view.findViewById(R.id.btn_calculator_programmer);
+        button_scientific = (Button) view.findViewById(R.id.btn_calculator_scientific);
+        button_unitconverter = (Button) view.findViewById(R.id.btn_unit_converter);
+
+
+        //---------------------- ON CLICK LISTENER FOR NUMBER PAD------------------------
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +151,8 @@ public class BasicFragment extends Fragment {
             }
         });
 
+        //---------------------- ON CLICK LISTENER FOR ARITHMETIC FUNCTIONS ------------------------
+
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,13 +228,32 @@ public class BasicFragment extends Fragment {
             }
         });
 
-    }
+        //-------------- ON CLICK LISTENER FOR CALCULATOR MODES ------------------------
 
-//        view.view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
+
+        button_programmer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(BasicFragment.this)
+                        .navigate(R.id.action_BasicFragment_to_programmerFragment);
+            }
+        });
+
+        button_scientific.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(BasicFragment.this)
+                        .navigate(R.id.action_BasicFragment_to_ScientificFragment);
+            }
+        });
+//        button_unitconverter.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                NavHostFragment.findNavController(FirstFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+//                NavHostFragment.findNavController(BasicFragment.this)
+//                        .navigate(R.id.action_FirstFragment_to_programmerFragment);
 //            }
 //        });
+    }
+
+
 }
