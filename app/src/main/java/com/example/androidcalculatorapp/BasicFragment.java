@@ -74,6 +74,8 @@ public class BasicFragment extends Fragment {
 
         //---------------------- ON CLICK LISTENER FOR NUMBER PAD------------------------
 
+
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

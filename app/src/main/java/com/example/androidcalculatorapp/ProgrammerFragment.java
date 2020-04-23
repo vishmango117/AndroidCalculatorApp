@@ -11,12 +11,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProgrammerFragment extends Fragment {
+
+    // BUTTONS FOR NUMBER PAD
+    Button button0, button1, button2, button3, button4, button5, button6,
+            button7, button8, button9, button00;
+
+    // BUTTONS FOR ARITHEMATIC EXPRESSIONS
+    Button buttonAdd, buttonSub, buttonDivision,
+            buttonMul, buttonC, buttonEqual;
+
+    // INPUT TEXT
+    EditText myEditText;
+
+    float mValueOne, mValueTwo;
+
+    boolean cAddition, cSubtract, cMultiply, cDivision;
 
     Button button_scientific, button_basic, button_unitconverter;
 
@@ -36,6 +52,8 @@ public class ProgrammerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         button_basic = view.findViewById(R.id.btn_calculator_basic);
         button_scientific = view.findViewById(R.id.btn_calculator_scientific);
