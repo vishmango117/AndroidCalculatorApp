@@ -9,27 +9,42 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/previous_operation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:text="53423"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/edt1"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/input_text_calc"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="@+id/previous_operation"
+        app:layout_constraintStart_toStartOf="@+id/previous_operation"
+        app:layout_constraintTop_toBottomOf="@+id/previous_operation">
+
+        <EditText
+            android:id="@+id/input_text"
+            android:layout_width="377dp"
+            android:layout_height="94dp"
+            android:layout_marginTop="16dp"
+            android:textSize="30sp"
+            android:layout_weight="0.2"/>
+
+        <TextView
+            android:id="@+id/display_operations"
+            android:layout_weight="0.8"
+            android:layout_width="match_parent"
+            android:layout_gravity="center|bottom"
+            android:textSize="30sp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
     <LinearLayout
@@ -38,15 +53,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/edt1"
-        app:layout_constraintStart_toStartOf="@+id/edt1"
-        app:layout_constraintTop_toBottomOf="@+id/edt1">
+        app:layout_constraintEnd_toEndOf="@+id/input_text_calc"
+        app:layout_constraintStart_toStartOf="@+id/input_text_calc"
+        app:layout_constraintTop_toBottomOf="@+id/input_text_calc">
 
         <Button
             android:id="@+id/btn_calculator_basic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="B"
+            android:layout_weight="0.33"
             android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="@+id/button_scientific"
             app:layout_constraintStart_toEndOf="@+id/button_scientific" />
@@ -56,32 +72,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="S"
+            android:layout_weight="0.33"
             android:textSize="40sp"
-            app:layout_constraintStart_toStartOf="@+id/edt1"
-            app:layout_constraintTop_toBottomOf="@+id/edt1" />
+            app:layout_constraintStart_toStartOf="@+id/input_text_calc"
+            app:layout_constraintTop_toBottomOf="@+id/input_text_calc" />
 
-
-
-        <Button
-            android:id="@+id/btn_unit_converter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="U"
-            android:textSize="40sp"
-            app:layout_constraintBottom_toBottomOf="@+id/calculator_programmer"
-            app:layout_constraintStart_toEndOf="@+id/calculator_programmer" />
 
         <Button
             android:id="@+id/btn_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="C"
-            android:textSize="40sp" />
-        <Button
-            android:id="@+id/btn_toggle_binary_and_hex"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
+            android:layout_weight="0.33"
             android:textSize="40sp" />
 
 
@@ -103,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_weight="0.2"
+            android:layout_weight="0.3"
             android:orientation="vertical">
 
             <LinearLayout
@@ -305,35 +307,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="0.8">
+            android:layout_weight="0.7">
 
             <Button
-                android:id="@+id/button_and"
-                android:layout_width="wrap_content"
+                android:id="@+id/button_hex"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="AND"
+                android:text="HEX"
                 android:textSize="30sp" />
 
             <Button
                 android:id="@+id/button_or"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="OR"
+                android:text="Binary"
                 android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/button_not"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="NOT"
-                android:textSize="30sp"/>
-
-            <Button
-                android:id="@+id/button_xor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="XOR"
-                android:textSize="30sp" />
 
         </LinearLayout>
 

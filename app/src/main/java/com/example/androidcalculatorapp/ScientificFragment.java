@@ -1,11 +1,15 @@
 package com.example.androidcalculatorapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,12 +34,18 @@ public class ScientificFragment extends Fragment {
     // INPUT TEXT
     private EditText myEditText;
 
-    double mValueOne, mValueTwo;
+    private TextView scientific_operation, display_operation;
+
+    double mValueOne, mValueTwo, mygenericvalue;
 
     int degree_value;
 
     boolean cAddition, cSubtract, cMultiply, cDivision,
             cSin, cCos, cTan, cLog, cSq, cSqrt, cInverse;
+
+    //ADDED SHARED PREFERENCES FOR PERSISTANT DATA
+    private SharedPreferences myprefs;
+    private SharedPreferences.Editor editor;
 
 
     // BUTTONS FOR CALCULATOR MODES
@@ -73,7 +83,15 @@ public class ScientificFragment extends Fragment {
         buttonMul = (Button) view.findViewById(R.id.button_mul);
         buttonDivision = (Button) view.findViewById(R.id.button_div);
         buttonEqual = (Button) view.findViewById(R.id.button_eql);
-        myEditText = (EditText) view.findViewById(R.id.edt1);
+
+        scientific_operation = (TextView) view.findViewById(R.id.scientific_ops_message);
+        myEditText = (EditText) view.findViewById(R.id.input_text);
+        display_operation = (TextView) view.findViewById(R.id.display_operations);
+
+        //DISABLE SOFT KEYBOARD
+        myEditText.setShowSoftInputOnFocus(false);
+        myEditText.setInputType(InputType.TYPE_NULL);
+        myEditText.setFocusable(false);
 
         // BUTTONS FOR OTHER MODES
         buttonC = (Button) view.findViewById(R.id.btn_clear);
@@ -85,6 +103,13 @@ public class ScientificFragment extends Fragment {
         button_cos = (Button) view.findViewById(R.id.button_cos);
         button_tan = (Button) view.findViewById(R.id.button_tan);
         button_log = (Button) view.findViewById(R.id.button_log);
+        button_sqroot = (Button) view.findViewById(R.id.button_sqroot);
+        button_square = (Button) view.findViewById(R.id.button_square);
+
+        //OBJECTS TO LOAD/SAVE DATA FROM SHAREDPREFERENCES
+        myprefs = this.getActivity().getSharedPreferences("persistantdata", Context.MODE_PRIVATE);
+        editor = this.getActivity().getSharedPreferences("persistantdata", Context.MODE_PRIVATE).edit();
+        scientific_operation.setText(myprefs.getString("PREVIOUS_OPS", ""));
 
         //---------------------- ON CLICK LISTENER FOR NUMBER PAD------------------------
 
@@ -167,6 +192,7 @@ public class ScientificFragment extends Fragment {
                 } else {
                     mValueOne = Float.parseFloat(myEditText.getText() + "");
                     cAddition = true;
+                    display_operation.setText("+");
                     myEditText.setText(null);
                 }
             }
@@ -177,6 +203,7 @@ public class ScientificFragment extends Fragment {
             public void onClick(View v) {
                 mValueOne = Float.parseFloat(myEditText.getText() + "");
                 cSubtract = true;
+                display_operation.setText("-");
                 myEditText.setText(null);
             }
         });
@@ -186,6 +213,7 @@ public class ScientificFragment extends Fragment {
             public void onClick(View v) {
                 mValueOne = Float.parseFloat(myEditText.getText() + "");
                 cMultiply = true;
+                display_operation.setText("*");
                 myEditText.setText(null);
             }
         });
@@ -195,6 +223,7 @@ public class ScientificFragment extends Fragment {
             public void onClick(View v) {
                 mValueOne = Float.parseFloat(myEditText.getText() + "");
                 cDivision = true;
+                display_operation.setText("/");
                 myEditText.setText(null);
             }
         });
@@ -202,8 +231,9 @@ public class ScientificFragment extends Fragment {
         button_sin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                degree_value = Integer.parseInt(myEditText.getText() + "");
                 cSin = true;
+                display_operation.setText("Sin()");
+
                 myEditText.setText(null);
             }
         });
@@ -211,8 +241,8 @@ public class ScientificFragment extends Fragment {
         button_cos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                degree_value = Integer.parseInt(myEditText.getText() + "");
                 cCos = true;
+                display_operation.setText("Cos()");
                 myEditText.setText(null);
             }
         });
@@ -220,8 +250,8 @@ public class ScientificFragment extends Fragment {
         button_tan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                degree_value = Integer.parseInt(myEditText.getText() + "");
                 cTan = true;
+                display_operation.setText("Tan()");
                 myEditText.setText(null);
             }
         });
@@ -229,9 +259,24 @@ public class ScientificFragment extends Fragment {
         button_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                degree_value = Integer.parseInt(myEditText.getText() + "");
                 cLog = true;
+                display_operation.setText("Log()");
+
                 myEditText.setText(null);
+            }
+        });
+
+        button_sqroot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               cSqrt = true;
+            }
+        });
+
+        button_square.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cSq = true;
             }
         });
 
@@ -241,62 +286,97 @@ public class ScientificFragment extends Fragment {
 
                 if (cAddition == true) {
                     mValueTwo = Float.parseFloat(myEditText.getText() + "");
+                    scientific_operation.setText(mValueOne + "+" + mValueTwo);
                     myEditText.setText(mValueOne + mValueTwo + "");
                     cAddition = false;
                 }
 
                 if (cSubtract == true) {
                     mValueTwo = Float.parseFloat(myEditText.getText() + "");
+                    myEditText.setText(mValueOne + mValueTwo + "");
+                    scientific_operation.setText(mValueOne + "-" + mValueTwo);
                     myEditText.setText(mValueOne - mValueTwo + "");
                     cSubtract = false;
                 }
 
                 if (cMultiply == true) {
                     mValueTwo = Float.parseFloat(myEditText.getText() + "");
+                    scientific_operation.setText(mValueOne + "*" + mValueTwo);
                     myEditText.setText(mValueOne * mValueTwo + "");
                     cMultiply = false;
                 }
 
                 if (cDivision == true) {
                     mValueTwo = Float.parseFloat(myEditText.getText() + "");
+                    scientific_operation.setText(mValueOne + "/" + mValueTwo);
                     myEditText.setText(mValueOne / mValueTwo + "");
                     cDivision = false;
                 }
 
                 if (cSin == true) {
                     if (cInverse == true) {
-                        myEditText.setText(Math.asin(degree_value) + "");
+                        degree_value = Integer.parseInt(myEditText.getText() + "");
+                        scientific_operation.setText("aSin(" + degree_value +")");
+                        myEditText.setText(Math.asin((degree_value*3.14) / 180) + "");
                         cInverse = false;
 
                     } else {
+                        degree_value = Integer.parseInt(myEditText.getText() + "");
+                        scientific_operation.setText("Sin(" + degree_value +")");
                         myEditText.setText(Math.sin((degree_value*3.14) / 180) + "");
                     }
                     cSin = false;
                 }
                 if (cCos == true) {
                     if (cInverse == true) {
+                        degree_value = Integer.parseInt(myEditText.getText() + "");
+                        scientific_operation.setText("aCos(" + degree_value +")");
                         myEditText.setText(Math.acos(degree_value) + "");
                         cInverse = false;
 
                     } else {
-                        myEditText.setText(Math.cos(degree_value) + "");
+                        degree_value = Integer.parseInt(myEditText.getText() + "");
+                        scientific_operation.setText("Cos(" + degree_value +")");
+                        myEditText.setText(Math.cos((degree_value*3.14) / 180) + "");
                     }
                     cCos = false;
                 }
                 if (cTan == true) {
                     if (cInverse == true) {
+                        degree_value = Integer.parseInt(myEditText.getText() + "");
+                        scientific_operation.setText("aTan(" + degree_value +")");
                         myEditText.setText(Math.atan(degree_value) + "");
                         cInverse = false;
 
                     } else {
-                        myEditText.setText(Math.tan(degree_value) + "");
+                        degree_value = Integer.parseInt(myEditText.getText() + "");
+                        scientific_operation.setText("Tan(" + degree_value +")");
+                        myEditText.setText(Math.tan((degree_value*3.14) / 180) + "");
                     }
                     cTan = false;
                 }
                 if (cLog == true) {
-                    myEditText.setText(Math.log(mValueOne) + "");
+                    mygenericvalue = Double.parseDouble(myEditText.getText() + "");
+                    scientific_operation.setText("Log(" + mygenericvalue +")");
+                    myEditText.setText(Math.log(mygenericvalue) + "");
                     cLog = false;
                 }
+
+                if(cSq == true) {
+                    mygenericvalue = Double.parseDouble(myEditText.getText() + "");
+                    scientific_operation.setText("Square(" + mygenericvalue + ")");
+                    myEditText.setText((mygenericvalue * mygenericvalue) + "");
+                    cSq = false;
+                }
+
+                if(cSqrt == true) {
+                    mygenericvalue = Double.parseDouble(myEditText.getText() + "");
+                    scientific_operation.setText("Sqrt(" + mygenericvalue +")");
+                    myEditText.setText(Math.sqrt(mygenericvalue) + "");
+                }
+
+                editor.putString("PREVIOUS_OPS",scientific_operation.getText() + "");
+                editor.apply();
             }
         });
 
@@ -304,10 +384,13 @@ public class ScientificFragment extends Fragment {
         buttonC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                scientific_operation.setText(null);
                 myEditText.setText(null);
+                display_operation.setText(null);
             }
         });
 
+        // ON CLICK LISTENERS FOR NAVIGATION BETWEEN MODES
         button_programmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -323,12 +406,5 @@ public class ScientificFragment extends Fragment {
                         .navigate(R.id.action_ScientificFragment_to_BasicFragment);
             }
         });
-//        button_unitconverter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(BasicFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_programmerFragment);
-//            }
-//        });
     }
 }

@@ -1,15 +1,21 @@
 package com.example.androidcalculatorapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
+import org.w3c.dom.Text;
 
 public class BasicFragment extends Fragment {
 
@@ -27,9 +33,32 @@ public class BasicFragment extends Fragment {
     // INPUT TEXT
     EditText myEditText;
 
+    // TEXT VIEWS FOR DISPLAY PREVIOUS COMMANDS AND DISPLAY OPERATIONS NEEDED
+    private TextView previous_operation, display_operation;
+
     float mValueOne, mValueTwo;
 
+    // ADDING SHARED PREFERENCES FOR PERSISTANT DATA
+    private SharedPreferences myprefs;
+    private SharedPreferences.Editor editor;
+
     boolean cAddition, cSubtract, cMultiply, cDivision;
+
+    public float addition(float x, float y) {
+        return x+y;
+    }
+
+    public float subtraction(float x, float y) {
+        return x-y;
+    }
+
+    public float multiplication(float x, float y) {
+        return x*y;
+    }
+
+    public float division(float x, float y) {
+        return x/y;
+    }
 
     @Override
     public View onCreateView(
@@ -63,15 +92,26 @@ public class BasicFragment extends Fragment {
         buttonMul = (Button) view.findViewById(R.id.button_mul);
         buttonDivision = (Button) view.findViewById(R.id.button_div);
         buttonEqual = (Button) view.findViewById(R.id.button_eql);
-        myEditText = (EditText) view.findViewById(R.id.edt1);
+
+        //INITIALISING TEXT VIEWS AND EDIT TEXT
+        previous_operation = (TextView) view.findViewById(R.id.previous_operation);
+        display_operation = (TextView) view.findViewById(R.id.display_operations);
+        myEditText = (EditText) view.findViewById(R.id.input_text);
+
+        //DISABLE SOFT KEYBOARD
+        myEditText.setShowSoftInputOnFocus(false);
+        myEditText.setInputType(InputType.TYPE_NULL);
+        myEditText.setFocusable(false);
 
         // BUTTONS FOR OTHER MODES
         buttonC = (Button) view.findViewById(R.id.btn_clear);
         button_programmer = (Button) view.findViewById(R.id.btn_calculator_programmer);
         button_scientific = (Button) view.findViewById(R.id.btn_calculator_scientific);
-        button_unitconverter = (Button) view.findViewById(R.id.btn_unit_converter);
 
-
+        //OBJECTS TO LOAD/SAVE DATA FROM SHAREDPREFERENCES
+        myprefs = this.getActivity().getSharedPreferences("persistantdata", Context.MODE_PRIVATE);
+        editor = this.getActivity().getSharedPreferences("persistantdata", Context.MODE_PRIVATE).edit();
+        previous_operation.setText(myprefs.getString("PREVIOUS_OPS", ""));
         //---------------------- ON CLICK LISTENER FOR NUMBER PAD------------------------
 
 
@@ -164,6 +204,7 @@ public class BasicFragment extends Fragment {
                 } else {
                     mValueOne = Float.parseFloat(myEditText.getText() + "");
                     cAddition = true;
+                    display_operation.setText("+");
                     myEditText.setText(null);
                 }
             }
@@ -174,6 +215,7 @@ public class BasicFragment extends Fragment {
             public void onClick(View v) {
                 mValueOne = Float.parseFloat(myEditText.getText() + "");
                 cSubtract = true;
+                display_operation.setText("-");
                 myEditText.setText(null);
             }
         });
@@ -183,6 +225,7 @@ public class BasicFragment extends Fragment {
             public void onClick(View v) {
                 mValueOne = Float.parseFloat(myEditText.getText() + "");
                 cMultiply = true;
+                display_operation.setText("*");
                 myEditText.setText(null);
             }
         });
@@ -192,6 +235,7 @@ public class BasicFragment extends Fragment {
             public void onClick(View v) {
                 mValueOne = Float.parseFloat(myEditText.getText() + "");
                 cDivision = true;
+                display_operation.setText("/");
                 myEditText.setText(null);
             }
         });
@@ -202,26 +246,36 @@ public class BasicFragment extends Fragment {
                 mValueTwo = Float.parseFloat(myEditText.getText() + "");
 
                 if (cAddition == true) {
-                    myEditText.setText(mValueOne + mValueTwo + "");
+                    myEditText.setText(addition(mValueOne, mValueTwo) + "");
+                    previous_operation.setText(mValueOne + "+" + mValueTwo);
+
                     cAddition = false;
                 }
 
                 if (cSubtract == true) {
-                    myEditText.setText(mValueOne - mValueTwo + "");
+                    myEditText.setText(subtraction(mValueOne, mValueTwo) + "");
+                    previous_operation.setText(mValueOne + "-" + mValueTwo);
                     cSubtract = false;
                 }
 
                 if (cMultiply == true) {
-                    myEditText.setText(mValueOne * mValueTwo + "");
+                    myEditText.setText(multiplication(mValueOne, mValueTwo) + "");
+                    previous_operation.setText(mValueOne + "*" + mValueTwo);
+
                     cMultiply = false;
                 }
 
                 if (cDivision == true) {
-                    myEditText.setText(mValueOne / mValueTwo + "");
+                    myEditText.setText(division(mValueOne, mValueTwo) + "");
+                    previous_operation.setText(mValueOne + "/" + mValueTwo);
                     cDivision = false;
                 }
+                editor.putString("PREVIOUS_OPS",previous_operation.getText() + "");
+                editor.apply();
             }
         });
+
+        //ON CLICK LISTENER FOR CLEAR
 
         buttonC.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,14 +302,9 @@ public class BasicFragment extends Fragment {
                         .navigate(R.id.action_BasicFragment_to_ScientificFragment);
             }
         });
-//        button_unitconverter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(BasicFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_programmerFragment);
-//            }
-//        });
+
     }
+
 
 
 }
